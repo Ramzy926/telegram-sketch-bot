@@ -7,8 +7,8 @@ import json
 import os
 from datetime import datetime
 
-# Admin user ID
-ADMIN_ID = 6940005927
+# Get sensitive data from environment variables
+ADMIN_ID = int(os.environ.get('ADMIN_ID', '0'))
 
 # File to store user data
 USER_DB_FILE = "users.json"
@@ -295,7 +295,16 @@ async def handle_other_files(update: Update, context: ContextTypes.DEFAULT_TYPE)
 
 def main():
     """Start the bot."""
-    TOKEN = "8338505230:AAGKRnZSPLKNlIqjPA2FQRumLS-8WR2p2jA"
+    # Get token from environment variable
+    TOKEN = os.environ.get('BOT_TOKEN')
+    
+    if not TOKEN:
+        print("❌ ERROR: BOT_TOKEN environment variable not set!")
+        print("Please set BOT_TOKEN in your hosting platform's environment variables.")
+        exit(1)
+    
+    if ADMIN_ID == 0:
+        print("⚠️ WARNING: ADMIN_ID not set. Admin commands will not work.")
     
     # Create the Application with increased timeout
     from telegram.request import HTTPXRequest
